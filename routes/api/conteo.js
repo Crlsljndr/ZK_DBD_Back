@@ -30,6 +30,23 @@ router.post('/addKiller', async (req, res) => {
     }
 });
 
+router.delete('/deleteKiller/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await GestionDBD.eliminarKiller(id);
+        
+        if (result.success) {
+            res.status(200).json({ message: result.message });
+        } else {
+            res.status(404).json({ error: result.message });
+        }
+    } catch (error) {
+        console.error("Error en la eliminación:", error);
+        res.status(500).json({ error: "Error en la eliminación del killer" });
+    }
+});
+
 
 
 module.exports = router;
