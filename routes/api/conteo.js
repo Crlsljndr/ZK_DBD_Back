@@ -11,6 +11,25 @@ router.get('/list', async (req, res) => {
     }
 });
 
+router.post('/addKiller', async (req, res) => {
+    const { nombre } = req.body;
+
+    if (!nombre) {
+        return res.status(400).json({ error: "El nombre del killer es obligatorio" });
+    }
+
+    try {
+        const killerId = await GestionDBD.agregarKiller(nombre);
+        res.status(201).json({
+            message: "Killer agregado correctamente",
+            killerId: killerId
+        });
+    } catch (error) {
+        console.error("Error al agregar el killer:", error);
+        res.status(500).json({ error: "Error al agregar el killer" });
+    }
+});
+
 
 
 module.exports = router;

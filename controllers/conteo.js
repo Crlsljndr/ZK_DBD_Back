@@ -30,6 +30,25 @@ class GestionDBD {
             console.error("Error al registrar la partida:", error);
         }
     }
+
+    async agregarKiller(nombre) {
+        const db = await connectDB();
+        const collection = db.collection("Killer");
+
+        try {
+            const nuevoKiller = {
+                nombre: nombre,
+                numeroDeVeces: 0
+            };
+
+            const result = await collection.insertOne(nuevoKiller);
+
+            console.log("Killer agregado correctamente:", result.insertedId);
+            return result.insertedId; // Devuelve el _id generado automáticamente
+        } catch (error) {
+            console.error("Error al agregar el killer:", error);
+        }
+    }
 }
 
 module.exports = new GestionDBD();
