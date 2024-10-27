@@ -47,6 +47,28 @@ router.delete('/deleteKiller/:id', async (req, res) => {
     }
 });
 
+router.put('/editKillerName/:id', async (req, res) => {
+    const { id } = req.params;
+    const { nombre } = req.body;
+
+    if (!nombre) {
+        return res.status(400).json({ error: "El nombre es obligatorio" });
+    }
+
+    try {
+        const result = await GestionDBD.editarKiller(id, nombre);
+
+        if (result.success) {
+            res.status(200).json({ message: result.message });
+        } else {
+            res.status(404).json({ error: result.message });
+        }
+    } catch (error) {
+        console.error("Error en la edición:", error);
+        res.status(500).json({ error: "Error en la edición del killer" });
+    }
+});
+
 
 
 module.exports = router;

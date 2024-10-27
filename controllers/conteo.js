@@ -71,6 +71,35 @@ class GestionDBD {
             return { success: false, message: "Error al eliminar el killer" };
         }
     }
+
+    async editarKiller(id, nuevoNombre) {
+        const db = await connectDB();
+        const collection = db.collection("Killer");
+
+        // Verificar si el ID es un ObjectId válido
+        if (!ObjectId.isValid(id)) {
+            console.log("ID no válido");
+            return { success: false, message: "ID no válido" };
+        }
+
+        try {
+            const result = await collection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: { nombre: nuevoNombre } }
+            );
+
+            if (result.modifiedCount > 0) {
+                console.log("Nombre del killer editado correctamente.");
+                return { success: true, message: "Nombre del killer editado correctamente" };
+            } else {
+                console.log("No se encontró el killer con el ID especificado.");
+                return { success: false, message: "No se encontró el killer con el ID especificado" };
+            }
+        } catch (error) {
+            console.error("Error al editar el nombre del killer:", error);
+            return { success: false, message: "Error al editar el nombre del killer" };
+        }
+    }
 }
 
 module.exports = new GestionDBD();
